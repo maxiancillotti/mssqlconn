@@ -9,9 +9,7 @@ type DBConnecterBuilder interface {
 
 	SetCredentials(user string, password string) DBConnecterBuilder
 
-	EnableDebug() DBConnecterBuilder
-
-	Build() DBConnector
+	Build() DBConnecter
 }
 
 type dbConnBuilder struct {
@@ -32,7 +30,7 @@ func NewBuilder() DBConnecterBuilder {
 	}
 }
 
-func (b *dbConnBuilder) Build() DBConnector {
+func (b *dbConnBuilder) Build() DBConnecter {
 	return &dbConn{
 		dbconfig: b,
 	}
@@ -56,10 +54,5 @@ func (b *dbConnBuilder) SetDatabaseName(dbname string) DBConnecterBuilder {
 func (b *dbConnBuilder) SetCredentials(user, password string) DBConnecterBuilder {
 	b.user = user
 	b.password = password
-	return b
-}
-
-func (b *dbConnBuilder) EnableDebug() DBConnecterBuilder {
-	b.debug = true
 	return b
 }

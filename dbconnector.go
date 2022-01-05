@@ -10,7 +10,7 @@ import (
 	_ "github.com/denisenkom/go-mssqldb"
 )
 
-type DBConnector interface {
+type DBConnecter interface {
 	OpenConn() *sql.DB
 }
 
@@ -28,11 +28,11 @@ func (db *dbConn) OpenConn() *sql.DB {
 		connString := db.getConnString()
 		conn, err := sql.Open("mssql", connString)
 		if err != nil {
-			log.Panicln("Open connection to database failed: ", err.Error())
+			log.Fatal("Open connection to database failed:", err.Error())
 		}
 		err = conn.Ping()
 		if err != nil {
-			log.Panicln("Connection to database failed: ", err.Error())
+			log.Fatal("Connection to database failed:", err.Error())
 		}
 		db.conn = conn
 	})
@@ -41,14 +41,17 @@ func (db *dbConn) OpenConn() *sql.DB {
 
 func (db *dbConn) getConnString() string {
 
-	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;database=%s;port=%d", db.dbconfig.server, db.dbconfig.user, db.dbconfig.password, db.dbconfig.dbname, db.dbconfig.port)
-
 	if db.dbconfig.debug {
 		fmt.Printf(" server:%s\n", db.dbconfig.server)
-		fmt.Printf(" port:%d\n", db.dbconfig.port)
+		//fmt.Printf(" port:%d\n", db.dbconfig.port)
 		fmt.Printf(" user:%s\n", db.dbconfig.user)
 		fmt.Printf(" password:%s\n", db.dbconfig.password)
 		fmt.Printf(" dbname:%s\n", db.dbconfig.dbname)
+	}
+
+	//connString := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;database=%s", server, user, password, port, dbname)
+	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;database=%s", db.dbconfig.server, db.dbconfig.user, db.dbconfig.password, db.dbconfig.dbname)
+	if db.dbconfig.debug {
 		fmt.Printf(" connString:%s\n", connString)
 	}
 
