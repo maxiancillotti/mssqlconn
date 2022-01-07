@@ -1,15 +1,15 @@
 package mssqlconn
 
-type DBConnecterBuilder interface {
-	SetServer(server string) DBConnecterBuilder
+type DBConnectorBuilder interface {
+	SetServer(server string) DBConnectorBuilder
 
-	SetPort(port int) DBConnecterBuilder
+	SetPort(port int) DBConnectorBuilder
 
-	SetDatabaseName(dbname string) DBConnecterBuilder
+	SetDatabaseName(dbname string) DBConnectorBuilder
 
-	SetCredentials(user string, password string) DBConnecterBuilder
+	SetCredentials(user string, password string) DBConnectorBuilder
 
-	EnableDebug() DBConnecterBuilder
+	EnableDebug() DBConnectorBuilder
 
 	Build() DBConnector
 }
@@ -25,7 +25,7 @@ type dbConnBuilder struct {
 
 // NewBuiler returns a DBConnecterBuilder that you can configure to
 // build a database connector that can open a database connection.
-func NewBuilder() DBConnecterBuilder {
+func NewBuilder() DBConnectorBuilder {
 	return &dbConnBuilder{
 		port:  1433,
 		debug: false,
@@ -38,28 +38,28 @@ func (b *dbConnBuilder) Build() DBConnector {
 	}
 }
 
-func (b *dbConnBuilder) SetServer(server string) DBConnecterBuilder {
+func (b *dbConnBuilder) SetServer(server string) DBConnectorBuilder {
 	b.server = server
 	return b
 }
 
-func (b *dbConnBuilder) SetPort(port int) DBConnecterBuilder {
+func (b *dbConnBuilder) SetPort(port int) DBConnectorBuilder {
 	b.port = port
 	return b
 }
 
-func (b *dbConnBuilder) SetDatabaseName(dbname string) DBConnecterBuilder {
+func (b *dbConnBuilder) SetDatabaseName(dbname string) DBConnectorBuilder {
 	b.dbname = dbname
 	return b
 }
 
-func (b *dbConnBuilder) SetCredentials(user, password string) DBConnecterBuilder {
+func (b *dbConnBuilder) SetCredentials(user, password string) DBConnectorBuilder {
 	b.user = user
 	b.password = password
 	return b
 }
 
-func (b *dbConnBuilder) EnableDebug() DBConnecterBuilder {
+func (b *dbConnBuilder) EnableDebug() DBConnectorBuilder {
 	b.debug = true
 	return b
 }
