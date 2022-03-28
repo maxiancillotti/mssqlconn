@@ -16,6 +16,8 @@ var conn = mssqlconn.NewBuilder().
 	OpenConn()
 
 func main() {
+	defer conn.Close()
+
 	rows, err := conn.Query("select * from Customers")
 
 	if err != nil {
