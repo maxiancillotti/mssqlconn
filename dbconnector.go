@@ -10,6 +10,14 @@ import (
 	_ "github.com/denisenkom/go-mssqldb"
 )
 
+const (
+	// Previous
+	// driverName = "mssql"
+	// https://stackoverflow.com/questions/70133186/golang-sql-error-expected-0-arguments-got-3/70134170#70134170
+
+	driverName = "sqlserver"
+)
+
 type DBConnector interface {
 	OpenConn() *sql.DB
 }
@@ -26,7 +34,7 @@ func (db *dbConn) OpenConn() *sql.DB {
 
 	db.connOnce.Do(func() {
 		connString := db.getConnString()
-		conn, err := sql.Open("mssql", connString)
+		conn, err := sql.Open(driverName, connString)
 		if err != nil {
 			log.Panicln("Open connection to database failed: ", err.Error())
 		}
