@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"net/url"
 	"sync"
 
 	//Database SQL Server Driver Initialization
@@ -49,16 +50,27 @@ func (db *dbConn) OpenConn() *sql.DB {
 
 func (db *dbConn) getConnString() string {
 
-	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;database=%s;port=%d", db.dbconfig.server, db.dbconfig.user, db.dbconfig.password, db.dbconfig.dbname, db.dbconfig.port)
+	query := url.Values{}
+	query.Add("database", db.dbconfig.dbname)
+
+	u := &url.URL{
+		Scheme:   "sqlserver",
+		User:     url.UserPassword(db.dbconfig.user, db.dbconfig.password),
+		Host:     fmt.Sprintf("%s:%d", db.dbconfig.hostname, db.dbconfig.port),
+		Path:     db.dbconfig.intance,
+		RawQuery: query.Encode(),
+	}
+
+	connString := u.String()
 
 	if db.dbconfig.debug {
-		fmt.Printf(" server:%s\n", db.dbconfig.server)
+		fmt.Printf(" hostname:%s\n", db.dbconfig.hostname)
 		fmt.Printf(" port:%d\n", db.dbconfig.port)
+		fmt.Printf(" instance:%s\n", db.dbconfig.intance)
 		fmt.Printf(" user:%s\n", db.dbconfig.user)
 		fmt.Printf(" password:%s\n", db.dbconfig.password)
 		fmt.Printf(" dbname:%s\n", db.dbconfig.dbname)
 		fmt.Printf(" connString:%s\n", connString)
 	}
-
 	return connString
 }

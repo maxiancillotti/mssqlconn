@@ -1,9 +1,11 @@
 package mssqlconn
 
 type DBConnectorBuilder interface {
-	SetServer(server string) DBConnectorBuilder
+	SetHostname(hostname string) DBConnectorBuilder
 
 	SetPort(port int) DBConnectorBuilder
+
+	SetInstance(instance string) DBConnectorBuilder
 
 	SetDatabaseName(dbname string) DBConnectorBuilder
 
@@ -15,8 +17,9 @@ type DBConnectorBuilder interface {
 }
 
 type dbConnBuilder struct {
-	server   string
+	hostname string
 	port     int
+	intance  string
 	user     string
 	password string
 	dbname   string
@@ -38,13 +41,18 @@ func (b *dbConnBuilder) Build() DBConnector {
 	}
 }
 
-func (b *dbConnBuilder) SetServer(server string) DBConnectorBuilder {
-	b.server = server
+func (b *dbConnBuilder) SetHostname(hostname string) DBConnectorBuilder {
+	b.hostname = hostname
 	return b
 }
 
 func (b *dbConnBuilder) SetPort(port int) DBConnectorBuilder {
 	b.port = port
+	return b
+}
+
+func (b *dbConnBuilder) SetInstance(instance string) DBConnectorBuilder {
+	b.intance = instance
 	return b
 }
 
